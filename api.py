@@ -2,6 +2,7 @@ import requests
 from conf import API_URL
 import json
 import sqlite3
+import win10toast
 import os
 
 """
@@ -15,16 +16,20 @@ def get_listing():
 
     res = requests.get(API_URL, headers=headers)
     if res.status_code == 200:
+        win10toast.ToastNotifier().show_toast("დასრულდა წამოყება", "მანქანების მონაცემები წამოყებულია")
         return res.json()
     else:
+        win10toast.ToastNotifier().show_toast("წამოღება ვერ მოხერხდა", "მანქანების მონაცემების წამოღება ვერ მოხერხდა")
         return []
 
+
+listing = get_listing()
 
 """
 ვპრინტავ მანქნების სიას
 """
 
-for car in get_listing():
+for car in listing:
     print(f"name: {car['nome']}, code: {car['codigo']}")
 
 
@@ -32,7 +37,7 @@ for car in get_listing():
 JSON ფაილში ჩაწერა
 """
 
-json_object = json.dumps({"cars": get_listing()}, indent=4)
+json_object = json.dumps({"cars": listing}, indent=4)
 
 with open('cars.json', 'w') as f:
     f.write(json_object)
@@ -61,4 +66,4 @@ def save_to_db(list):
     conn.close()
 
 
-save_to_db(get_listing())
+save_to_db(listing)
