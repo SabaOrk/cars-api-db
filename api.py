@@ -48,11 +48,8 @@ def save_to_db(list):
     ინფორმაციის ბაზაში ჩაწერა sqlite-ის გამოყენებით
     table: cars (name, code)
     """
-
-    if os.path.exists("cars.sqlite"):
-        conn = sqlite3.connect('cars.sqlite')
-    else:
-        conn = sqlite3.connect('cars.sqlite')
+   
+    conn = sqlite3.connect('cars.sqlite')
 
     c = conn.cursor()
     c.execute('''CREATE TABLE cars
